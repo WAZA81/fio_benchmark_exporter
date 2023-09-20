@@ -497,7 +497,7 @@ func main() {
 					log.Printf("Error parsing readRuntime (parts[8]): %s\n", err)
 					fioBenchmarkSuccess.WithLabelValues(*benchmark).Set(0)
 				} else {
-					fioReadRuntime.WithLabelValues(*benchmark).Set(readUrntime)
+					fioReadRuntime.WithLabelValues(*benchmark).Set(readRuntime)
 				}
 
 				readLat90, err := strconv.ParseFloat(strings.Split(parts[27], "=")[1], 64)
