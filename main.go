@@ -45,6 +45,13 @@ var (
 		},
 		labels,
 	)
+	fioReadRuntime = prometheus.NewGaugeVec(
+		prometheus.GaugeOpts{
+			Name: "fio_read_runtime",
+			Help: "Read runtime",
+		},
+		labels,
+	)
 	fioReadLat90 = prometheus.NewGaugeVec(
 		prometheus.GaugeOpts{
 			Name: "fio_read_lat_pct90",
@@ -140,6 +147,13 @@ var (
 		prometheus.GaugeOpts{
 			Name: "fio_write_iops",
 			Help: "Write IOPS",
+		},
+		labels,
+	)
+	fioWriteRuntime = prometheus.NewGaugeVec(
+		prometheus.GaugeOpts{
+			Name: "fio_write_runtime",
+			Help: "Write runtime",
 		},
 		labels,
 	)
@@ -304,6 +318,7 @@ func init() {
 	promRegistry.MustRegister(
 		fioReadBW,
 		fioReadIOPS,
+		fioReadRuntime,
 		fioReadLat90,
 		fioReadLat95,
 		fioReadLat99,
@@ -318,6 +333,7 @@ func init() {
 		fioReadIOPSMean,
 		fioWriteBW,
 		fioWriteIOPS,
+		fioWriteRuntime,
 		fioWriteLat90,
 		fioWriteLat95,
 		fioWriteLat99,
@@ -476,6 +492,14 @@ func main() {
 					fioReadIOPS.WithLabelValues(*benchmark).Set(readIOPS)
 				}
 
+				readRuntime, err := strconv.ParseFloat(parts[8], 64)
+				if err != nil {
+					log.Printf("Error parsing readRuntime (parts[8]): %s\n", err)
+					fioBenchmarkSuccess.WithLabelValues(*benchmark).Set(0)
+				} else {
+					fioReadRuntime.WithLabelValues(*benchmark).Set(readUrntime)
+				}
+
 				readLat90, err := strconv.ParseFloat(strings.Split(parts[27], "=")[1], 64)
 				if err != nil {
 					log.Printf("Error parsing readLat90 (parts[27]): %s\n", err)
@@ -585,6 +609,14 @@ func main() {
 					fioBenchmarkSuccess.WithLabelValues(*benchmark).Set(0)
 				} else {
 					fioWriteIOPS.WithLabelValues(*benchmark).Set(writeIOPS)
+				}
+
+				writeRuntime, err := strconv.ParseFloat(parts[55], 64)
+				if err != nil {
+					log.Printf("Error parsing writeRuntime (parts[55]): %s\n", err)
+					fioBenchmarkSuccess.WithLabelValues(*benchmark).Set(0)
+				} else {
+					fioWriteRuntime.WithLabelValues(*benchmark).Set(writeRuntime)
 				}
 
 				writeLat90, err := strconv.ParseFloat(strings.Split(parts[74], "=")[1], 64)
