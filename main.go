@@ -387,7 +387,7 @@ func main() {
 	case "custom":
 		break
 	default:
-		fioBenchmarkFlags = "--name=latency --numjobs=1 --ioengine=libaio --direct=1 --bs=4k --iodepth=1 --readwrite=randrw"
+		fioBenchmarkFlags = "--name=throughput --numjobs=1 --ioengine=libaio --direct=1 --bs=4k --iodepth=32 --readwrite=randrw"
 	}
 
 	// make sure custom fio flags supplied for custom benchmark
