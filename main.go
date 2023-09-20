@@ -363,7 +363,7 @@ func main() {
 	// START FLAGS
 	benchmark := flag.String("benchmark", "latency", "iops, latency or throughput")
 	benchmarkRuntime := flag.String("benchmarkRuntime", "60", "runtime for benchmark in seconds")
-	cronSchedule := flag.String("cronSchedule", "0 */6 * * *", "crontab formatted schedule")
+	cronSchedule := flag.String("cronSchedule", "* * * * *", "crontab formatted schedule")
 	customBenchmarkFioFlags := flag.String("customBenchmarkFioFlags", "", "experts only")
 	directory := flag.String("directory", "/tmp", "absolute path to directory to use for benchmark files")
 	fileSize := flag.String("fileSize", "1G", "size of file to use for benchmark")
